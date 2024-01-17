@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/*  
+>>===================    React slick css      =================>>
+*/
+
+
+.slick-prev::before,
+.slick-next::before {
+ /* background: black; */
+ font-size: 1.5rem;
+ color: black;
+}
+
+.slick-arrow {
+ z-index: 5;
+ top: 30%;
+}
+
+.slick-prev {
+ left: .5rem;
+}
+
+.slick-next {
+ right: .5rem;
+}
+
+.fixed-header {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+}
+
+@media screen and (min-width:640px) {
+
+ .slick-prev::before,
+ .slick-next::before {
+  font-size: 2rem;
+ }
+
+ .slick-prev {
+  left: 1rem;
+ }
+
+ .slick-next {
+  right: 2rem;
+ }
+}
+
+.active {
+ padding-bottom: .35rem;
+ border-bottom: 2px solid #fff;
+
+}
+
+.btn-active {
+ color: orange;
+ background-color: #333;
+ font-size: 1.2rem;
+}
+
+
+/* >>===================      SIDEBAR               =================>> */
+
+
+/*  
+>>===================    Project CSS      =================>>
+*/
