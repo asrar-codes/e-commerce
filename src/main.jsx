@@ -12,7 +12,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
   <Provider store={store}>
     <ToastContainer
       position="top-right"
@@ -22,5 +21,4 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     />
     <App />
   </Provider>
-  // </React.StrictMode>
 );

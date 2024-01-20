@@ -4,6 +4,7 @@ import { ID } from "appwrite";
 
 const initialState = {
   user: null,
+  sessionID: null,
   isLoading: false,
 };
 
@@ -23,11 +24,16 @@ const signUpSlice = createSlice({
   reducers: {
     signUp: (state, action) => {
       console.log(action.payload);
-      state.user = action.payload;
+      state.user = action.payload.user;
+      state.sessionID = action.payload.id;
+    },
+    logout: (state, action) => {
+      state.user = null;
+      state.sessionID = null;
     },
   },
 });
 
-export const { signUp } = signUpSlice.actions;
+export const { signUp, logout } = signUpSlice.actions;
 
 export default signUpSlice.reducer;

@@ -88,10 +88,23 @@ const cartSlice = createSlice({
       state.cartProducts = newCartProducts;
       toast.success("Item removed from cart");
     },
+
+    setCartProducts: (state, action) => {
+      // console.log(action.payload.cartProducts);
+
+      state.cartProducts = action.payload.cartProducts;
+      state.totalPriceOfCart = action.payload.totalPriceOfCart;
+      state.noOfItemsInCart = action.payload.noOfItemsInCart;
+    },
   },
 });
 
-export const { addToCart, getCartTotals, cartAmountChange, removeCartItem } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  getCartTotals,
+  cartAmountChange,
+  removeCartItem,
+  setCartProducts,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

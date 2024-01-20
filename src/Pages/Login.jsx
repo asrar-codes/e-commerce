@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 import { account, db } from "../appWrite/auth";
 import { store } from "../store";
 import { signUp } from "../features/auth/signUpSlice";
-import { ID } from "appwrite";
+import { getUserCart } from "../appWrite/database";
+import { setCartProducts } from "../features/cart/cartSlice";
 
 export const action = async ({ request }) => {
   const formData = await request.formData();
@@ -19,19 +20,22 @@ export const action = async ({ request }) => {
   try {
     const data = await account.createEmailSession(email, password);
     const user = await account.get();
-    user.$id = data.$id;
-    store.dispatch(signUp(user));
-    const res = await db.createDocument(
-      import.meta.env.VITE_APPWRITE_DATABASE_ID,
-      import.meta.env.VITE_APPWRITE_COLLECTION_ID,
-      ID.unique(),
-      {
-        cartProducts: cartProducts,
-        noOfItemsInCart,
-        totalPriceOfCart,
-      }
+    console.log(user.$id);
+    console.log(user);
+    store.dispatch(signUp({ user, id: data.$id }));
+    console.log(user.$id);
+    const cartData = await getUserCart(`${user.$id}`);
+    console.log(cartData);
+    const temp = cartData.cartProducts?.map((item) => JSON.parse(item));
+    console.log(temp);
+    store.dispatch(
+      setCartProducts({
+        cartProducts: temp,
+
+        totalPriceOfCart: cartData.totalPriceOfCart,
+        noOfItemsInCart: cartData.noOfItemsInCart,
+      })
     );
-    console.log(res);
     toast.success("Logged in successfully!");
 
     return redirect("/");

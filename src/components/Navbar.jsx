@@ -4,23 +4,32 @@ import { navLinks } from "../utils/NavLinks";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleDarkMode } from "../features/dakmode/darkModeSlice";
 import { account } from "../appWrite/auth";
-import { signUp } from "../features/auth/signUpSlice";
+import { logout, signUp } from "../features/auth/signUpSlice";
 import { toast } from "react-toastify";
 import { formatPrice } from "../utils/formatPrice";
+import { setCartProducts } from "../features/cart/cartSlice";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isDarkMode } = useSelector((state) => state.darkMode);
-  const { user } = useSelector((state) => state.signUp);
+  const { user, sessionID } = useSelector((state) => state.signUp);
   const { noOfItemsInCart } = useSelector((state) => state.cart);
 
-  const logout = async () => {
+  const handleLogout = async () => {
+    console.log(user.$id);
     try {
-      const promise = await account.deleteSession([user.$id]);
-      dispatch(signUp(null));
-      navigate("/");
+      await account.deleteSession([`${sessionID}`]);
+      dispatch(logout());
+      dispatch(
+        setCartProducts({
+          cartProducts: [],
+          noOfItemsInCart: 0,
+          totalPriceOfCart: 0,
+        })
+      );
       toast.success("logged out successfully");
+      navigate("/");
     } catch (error) {
       console.log(error);
       toast.error(error.message);
@@ -72,7 +81,7 @@ const Navbar = () => {
           {user ? (
             <>
               <p>Welcome, {user.name} </p>
-              <button onClick={logout}>logout</button>
+              <button onClick={handleLogout}>logout</button>
             </>
           ) : (
             <>
