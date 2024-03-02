@@ -19,7 +19,8 @@ import { loader as checkoutLoader } from "./Pages/Checkout";
 import Orders, { loader as ordersLoader } from "./Pages/Orders";
 import { action as createUserAction } from "./Pages/SignUp";
 import { action as loginUserAction } from "./Pages/Login";
-
+import { action as checkoutAction } from "./Pages/Checkout";
+import { store } from "./store";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -51,19 +52,20 @@ const router = createBrowserRouter([
         element: <Cart />,
         errorElement: <SinglePageError />,
       },
-      // {
-      //   path: "checkout",
-      //   element: <CheckOut />,
-      //   loader: checkoutLoader(user),
-      //   errorElement: <SinglePageError />,
-      // },
-      // {
-      //   path: "orders",
+      {
+        path: "checkout",
+        element: <CheckOut />,
+        loader: checkoutLoader(store),
+        action: checkoutAction(store),
+        errorElement: <SinglePageError />,
+      },
+      {
+        path: "orders",
 
-      //   element: <Orders />,
-      //   loader: ordersLoader(user),
-      //   errorElement: <SinglePageError />,
-      // },
+        element: <Orders />,
+        loader: ordersLoader(store),
+        errorElement: <SinglePageError />,
+      },
 
       {
         path: "about",
@@ -75,13 +77,13 @@ const router = createBrowserRouter([
   {
     path: "login",
     element: <Login />,
-    action: loginUserAction,
+    action: loginUserAction(store),
     errorElement: <SinglePageError />,
   },
   {
     path: "signup",
     element: <SignUp />,
-    action: createUserAction,
+    action: createUserAction(store),
     errorElement: <SinglePageError />,
   },
 ]);

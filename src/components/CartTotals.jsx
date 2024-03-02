@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 const CartTotals = () => {
   const { isDarkMode } = useSelector((state) => state.darkMode);
   const { totalPriceOfCart } = useSelector((state) => state.cart);
+  console.log(totalPriceOfCart);
   const tax = (15 / 100) * totalPriceOfCart;
   const shipping = 500;
   const grandTotal = totalPriceOfCart + tax + shipping;

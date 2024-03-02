@@ -4,47 +4,41 @@ import { useNavigation } from "react-router-dom";
 import LoginBtn from "../components/LoginBtn";
 import { LoginInput } from "../components";
 import { toast } from "react-toastify";
-import { account, db } from "../appWrite/auth";
-import { store } from "../store";
+import { account } from "../appWrite/auth";
 import { signUp } from "../features/auth/signUpSlice";
 import { getUserCart } from "../appWrite/database";
 import { setCartProducts } from "../features/cart/cartSlice";
 
-export const action = async ({ request }) => {
-  const formData = await request.formData();
-  const { email, password } = Object.fromEntries(formData);
-  const { cartProducts, noOfItemsInCart, totalPriceOfCart } = JSON.parse(
-    localStorage.getItem("cartDetails")
-  );
+export const action =
+  (store) =>
+  async ({ request }) => {
+    const formData = await request.formData();
+    const { email, password } = Object.fromEntries(formData);
 
-  try {
-    const data = await account.createEmailSession(email, password);
-    const user = await account.get();
-    console.log(user.$id);
-    console.log(user);
-    store.dispatch(signUp({ user, id: data.$id }));
-    console.log(user.$id);
-    const cartData = await getUserCart(`${user.$id}`);
-    console.log(cartData);
-    const temp = cartData.cartProducts?.map((item) => JSON.parse(item));
-    console.log(temp);
-    store.dispatch(
-      setCartProducts({
-        cartProducts: temp,
+    try {
+      const data = await account.createEmailSession(email, password);
+      const user = await account.get();
+      store.dispatch(signUp({ user, id: data.$id }));
+      const cartData = await getUserCart(`${user.$id}`);
+      console.log(cartData);
+      const temp = cartData.cartProducts?.map((item) => JSON.parse(item));
+      store.dispatch(
+        setCartProducts({
+          cartProducts: temp,
 
-        totalPriceOfCart: cartData.totalPriceOfCart,
-        noOfItemsInCart: cartData.noOfItemsInCart,
-      })
-    );
-    toast.success("Logged in successfully!");
+          totalPriceOfCart: cartData.cartProducts,
+          noOfItemsInCart: cartData.noOfItemsInCart,
+        })
+      );
+      toast.success("Logged in successfully!");
 
-    return redirect("/");
-  } catch (error) {
-    console.log(error);
-    toast.error(error.message);
-    return redirect("/login");
-  }
-};
+      return redirect("/");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+      return redirect("/login");
+    }
+  };
 
 const Login = () => {
   const navigation = useNavigation();

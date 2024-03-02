@@ -1,7 +1,6 @@
 import React from "react";
 
 const Loading = () => {
-  // <h1 className="text-2xl font-medium capitalize text-center">loading...</h1>
   return (
     <div className="flex  p-6 justify-center flex-row gap-2">
       <div className="w-4 h-4 rounded-full bg-blue-500 animate-bounce [animation-delay:.7s]"></div>

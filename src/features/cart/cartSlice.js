@@ -1,12 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { toast } from "react-toastify";
+import { formatPrice } from "../../utils/formatPrice";
 
 const cartData = JSON.parse(localStorage.getItem("cartDetails"));
 
 const initialState = {
   cartProducts: cartData ? cartData.cartProducts : [],
-  totalPriceOfCart: 0,
-  noOfItemsInCart: 0,
+  totalPriceOfCart: cartData ? cartData.totalPriceOfCart : 0,
+  noOfItemsInCart: cartData ? cartData.noOfItemsInCart : 0,
 };
 
 const cartSlice = createSlice({
@@ -58,6 +59,7 @@ const cartSlice = createSlice({
         },
         { noOfItems: 0, totalPrice: 0 }
       );
+      // console.log(newProducts.noOfItems, newProducts.totalPrice);
       localStorage.setItem(
         "cartDetails",
         JSON.stringify({

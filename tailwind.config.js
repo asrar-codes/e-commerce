@@ -19,6 +19,9 @@ export default {
     // boxShadow: {
     //   mainShadow: "1px 1px 6px #d0d0d0  ,-1px -1px 6px #f0f0f0",
     // },
+    transition: {
+      ...(defaultTheme.transitionDuration = "500ms"),
+    },
   },
   plugins: [
     plugin(function ({ addVariant }) {

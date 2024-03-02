@@ -20,6 +20,8 @@ const NotFound = () => {
       </section>
     );
   }
+  console.log(error);
+
   return (
     <section className="page">
       <h3>Error: {error.message}</h3>

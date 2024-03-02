@@ -5,3 +5,5 @@ const client = new Client()
 
 export const account = new Account(client);
 export const db = new Databases(client);
+
+// function to add twon

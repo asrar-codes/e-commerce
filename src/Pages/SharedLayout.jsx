@@ -4,17 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { getCartTotals } from "../features/cart/cartSlice";
 import { updateUserCart } from "../appWrite/database";
-const products_url = `https://strapi-store-server.onrender.com/api/products?featured=true`;
-
-let noOfPages;
+import { store } from "../store";
+// const products_url = `https://strapi-store-server.onrender.com/api/products?featured=true`;
 
 const SharedLayout = () => {
   const navigation = useNavigation();
   const isPageLoading = navigation.state === "loading";
   const dispatch = useDispatch();
-  const { cartProducts, totalPriceOfCart, noOfItemsInCart } = useSelector(
-    (state) => state.cart
-  );
+
   const { isDarkMode } = useSelector((state) => state.darkMode);
   const { user } = useSelector((state) => state.signUp);
 
@@ -34,16 +31,29 @@ const SharedLayout = () => {
   }, [isDarkMode]);
 
   useEffect(() => {
-    // const data = JSON.parse(localStorage.getItem("cartDetails"));
-    // console.log(data);
+    const event = window.addEventListener("unload", () => {
+      localStorage.removeItem("cartDetails");
+    });
+
+    return () => {
+      window.removeEventListener("unload", event);
+    };
+  }, []);
+
+  const { cartProducts } = useSelector((state) => state.cart);
+  useEffect(() => {
     dispatch(getCartTotals(cartProducts));
-    // console.log(cartProducts);
+
+    const state = store.getState((state) => state);
+
     if (user != null) {
       console.log("usr is not null");
       updateUserCart(user.$id, {
-        cartProducts: cartProducts.map((item) => JSON.stringify(item)),
-        totalPriceOfCart,
-        noOfItemsInCart,
+        cartProducts: state.cart.cartProducts.map((item) =>
+          JSON.stringify(item)
+        ),
+        totalPriceOfCart: state.cart.totalPriceOfCart,
+        noOfItemsInCart: state.cart.noOfItemsInCart,
         name: user.name,
       });
     }

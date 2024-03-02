@@ -19,7 +19,7 @@ const Carousel = () => {
                 key={carousel.id}
                 src={carousel.image}
                 alt={carousel.name}
-                className="slide-image w-full object-cover  max-h-screen mx-auto "
+                className="slide-image w-full object-cover  min-h-screen mx-auto "
               />
             );
           })}

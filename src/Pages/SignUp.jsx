@@ -6,50 +6,44 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { account, db } from "../appWrite/auth";
 import { ID } from "appwrite";
-import { store } from "../store";
 import { signUp } from "../features/auth/signUpSlice";
-import { getUserCart } from "../appWrite/database";
 
-// console.log(store.getState((state) => state.cart));
-const { cart } = store.getState((state) => state.cart);
-const { cartProducts, noOfItemsInCart, totalPriceOfCart } = cart;
-// console.log(cartProducts, noOfItemsInCart, totalPriceOfCart);
+export const action =
+  (store) =>
+  async ({ request }) => {
+    const { cart } = store.getState((state) => state.cart);
+    const { cartProducts, noOfItemsInCart, totalPriceOfCart } = cart;
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    const { name, email, password } = data;
 
-export const action = async ({ request }) => {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  const { name, email, password } = data;
-  try {
-    const user = await account.create(ID.unique(), email, password, name);
-    const userSession = await account.createEmailSession(email, password);
-    console.log(user);
-    console.log(user.$id);
-    console.log(userSession);
-    console.log(userSession.$id);
-    console.log(cartProducts);
-    const ls = cartProducts.map((item) => JSON.stringify(item));
-    console.log(ls);
+    try {
+      const user = await account.create(ID.unique(), email, password, name);
+      const userSession = await account.createEmailSession(email, password);
 
-    const res = await db.createDocument(
-      import.meta.env.VITE_APPWRITE_DATABASE_ID,
-      import.meta.env.VITE_APPWRITE_COLLECTION_ID,
-      user.$id,
-      {
-        cartProducts: cartProducts.map((item) => JSON.stringify(item)),
-        noOfItemsInCart,
-        totalPriceOfCart,
-        name: user.name,
-      }
-    );
-    toast.success("Account created successfully!");
-    store.dispatch(signUp({ user, id: userSession.$id }));
-    return redirect("/");
-  } catch (error) {
-    console.log(error);
-    toast.error(error.message);
-    return redirect("/signup");
-  }
-};
+      const ls = cartProducts.map((item) => JSON.stringify(item));
+      console.log(ls);
+
+      const res = await db.createDocument(
+        import.meta.env.VITE_APPWRITE_DATABASE_ID,
+        import.meta.env.VITE_APPWRITE_COLLECTION_USERS_ID,
+        user.$id,
+        {
+          cartProducts: cartProducts.map((item) => JSON.stringify(item)),
+          noOfItemsInCart,
+          totalPriceOfCart,
+          name: user.name,
+        }
+      );
+      toast.success("Account created successfully!");
+      store.dispatch(signUp({ user, id: userSession.$id }));
+      return redirect("/");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+      return redirect("/signup");
+    }
+  };
 
 const SignUp = () => {
   const navigation = useNavigation();
