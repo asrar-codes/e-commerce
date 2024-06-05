@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { redirect, useLoaderData } from "react-router-dom";
 import { toast } from "react-toastify";
 import SectionTitle from "../components/SectionTitle";
 
-import { CartItem } from "../components";
 import { formatPrice } from "../utils/formatPrice";
 import { getOrdersCollection } from "../appWrite/database";
 

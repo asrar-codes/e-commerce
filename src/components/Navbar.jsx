@@ -29,7 +29,7 @@ const Navbar = () => {
         >
           <FaBars className="" />
         </button>
-        <p className="hidden sm:block text-4xl border p-1 ml-4">BoxSpace</p>
+        <p className="hidden sm:block text-4xl border p-1 ml-4">asrar</p>
         <ul className="hidden sm:flex nav-links w-10/12  justify-center gap-4 mx-4 capitalize children:cursor-pointer ">
           {navLinks.map((link) => {
             const { id, url, text } = link;
